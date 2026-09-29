@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stephen - DHT11 Monitoring</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="background-grid"></div>
+<div class="background-glow"></div>
+
+<div class="page">
+
+    <header class="header">
+
+        <div class="brand">
+
+            <div class="brand-symbol">S</div>
+
+            <div>
+                <div class="brand-name">STEPHEN</div>
+                <div class="brand-sub">DHT11 COMMAND SENSOR SYSTEM</div>
+            </div>
+
+        </div>
+
+        <div class="header-code">
+            <span>NODE</span>
+            <strong>ESP32</strong>
+            <i></i>
+            <span>RTDB</span>
+            <strong>FIREBASE</strong>
+        </div>
+
+    </header>
+
+    <section class="hero">
+
+        <div class="hero-left">
+
+            <div class="eyebrow">
+                STEPHEN / ACTIVITY 4
+            </div>
+
+            <h1>
+                Real-Time
+                <span>Environment Monitor</span>
+            </h1>
+
+            <p>
+                ESP32 DHT11 temperature and humidity monitoring
+                with Firebase Realtime Database history.
+            </p>
+
+        </div>
+
+        <div class="hero-number">32</div>
+
+    </section>
+
+    <div
+        id="firebaseStatus"
+        class="status"
+    >
+        Firebase Status: Connecting...
+    </div>
+
+    <section class="current-section">
+
+        <article class="sensor-card">
+
+            <div class="sensor-top">
+                <span class="sensor-code">SENSOR / 01</span>
+                <span class="sensor-symbol">T</span>
+            </div>
+
+            <div class="sensor-label">
+                CURRENT TEMPERATURE
+            </div>
+
+            <div
+                id="currentTemperature"
+                class="sensor-value"
+            >
+                -- °C
+            </div>
+
+            <div class="sensor-description">
+                DHT11 temperature reading
+            </div>
+
+        </article>
+
+        <article class="sensor-card">
+
+            <div class="sensor-top">
+                <span class="sensor-code">SENSOR / 02</span>
+                <span class="sensor-symbol">H</span>
+            </div>
+
+            <div class="sensor-label">
+                CURRENT HUMIDITY
+            </div>
+
+            <div
+                id="currentHumidity"
+                class="sensor-value"
+            >
+                -- %
+            </div>
+
+            <div class="sensor-description">
+                DHT11 relative humidity reading
+            </div>
+
+        </article>
+
+    </section>
+
+    <section class="card graph-card">
+
+        <div class="section-header">
+
+            <div>
+                <div class="section-number">01 / TELEMETRY</div>
+                <h2>Sensor Graph</h2>
+                <p>Temperature and humidity by selected date.</p>
+            </div>
+
+            <select id="graphDate">
+                <option value="">Select Date</option>
+            </select>
+
+        </div>
+
+        <div class="chart-container">
+            <canvas id="sensorChart"></canvas>
+        </div>
+
+    </section>
+
+    <section class="card history-card">
+
+        <div class="history-header">
+
+            <div>
+                <div class="section-number">02 / HISTORY</div>
+                <h2>Sensor History</h2>
+            </div>
+
+            <button
+                id="toggleHistory"
+                class="button button-start"
+            >
+                Show History
+            </button>
+
+        </div>
+
+        <div
+            id="historyContent"
+            class="hidden"
+        >
+
+            <div class="history-controls">
+
+                <div class="history-select">
+
+                    <label for="historyDate">
+                        SELECT DATE
+                    </label>
+
+                    <select id="historyDate">
+                        <option value="">Select Date</option>
+                    </select>
+
+                </div>
+
+                <div class="records-count">
+                    <span>RECORDS</span>
+                    <strong id="recordCount">0 records</strong>
+                </div>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>TIME</th>
+                            <th>TEMPERATURE</th>
+                            <th>HUMIDITY</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="historyTableBody">
+                        <tr>
+                            <td colspan="3" class="loading">
+                                No sensor data available.
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="card wifi-section">
+
+        <div>
+            <div class="section-number">03 / NETWORK</div>
+            <h2>Wi-Fi Manager</h2>
+
+            <p>
+                Configure the Wi-Fi connection used by the
+                ESP32 sensor node.
+            </p>
+        </div>
+
+        <a
+            href="/change-wifi"
+            class="button button-start wifi-button"
+        >
+            OPEN WI-FI MANAGER
+        </a>
+
+    </section>
+
+    <footer>
+        <div>STEPHEN DHT11 MONITOR</div>
+        <div>ESP32 // FIREBASE RTDB</div>
+        <div>ACTIVITY 4</div>
+    </footer>
+
+</div>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"
+></script>
+
+<script
+    type="module"
+    src="app.js"
+></script>
+
+</body>
+</html>
