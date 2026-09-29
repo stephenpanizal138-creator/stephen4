@@ -1,0 +1,622 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #07090b;
+    --panel: #0d1115;
+    --panel-light: #11171c;
+    --panel-hover: #151c21;
+    --line: #222b32;
+    --line-light: #2c373f;
+    --text: #e8edf0;
+    --muted: #7c878e;
+    --dim: #4d585f;
+    --accent: #9ee870;
+    --accent-dark: #4f813e;
+    --red: #d56b6b;
+    --orange: #d69b58;
+    --white: #ffffff;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+.background-grid {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    pointer-events: none;
+    opacity: .25;
+    background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 45px 45px;
+}
+
+.background-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    right: -250px;
+    top: -250px;
+    z-index: -2;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            circle,
+            rgba(158,232,112,.08),
+            transparent 65%
+        );
+}
+
+.page {
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+    padding: 0 40px 40px;
+}
+
+.header {
+    min-height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-symbol {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    background: var(--accent);
+    color: #091008;
+    font-size: 17px;
+    font-weight: 900;
+    clip-path:
+        polygon(
+            0 0,
+            88% 0,
+            100% 12%,
+            100% 100%,
+            12% 100%,
+            0 88%
+        );
+}
+
+.brand-name {
+    font: 800 17px "JetBrains Mono", monospace;
+    letter-spacing: 2px;
+}
+
+.brand-sub {
+    margin-top: 3px;
+    color: var(--dim);
+    font: 600 7px "JetBrains Mono", monospace;
+    letter-spacing: 1.8px;
+}
+
+.header-code {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--dim);
+    font: 600 8px "JetBrains Mono", monospace;
+}
+
+.header-code strong {
+    color: #aab4b9;
+}
+
+.header-code i {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.hero {
+    min-height: 300px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+}
+
+.hero-left {
+    max-width: 720px;
+    padding: 65px 0;
+}
+
+.eyebrow,
+.section-number {
+    color: var(--accent);
+    font: 700 8px "JetBrains Mono", monospace;
+    letter-spacing: 2.5px;
+}
+
+.hero h1 {
+    margin-top: 18px;
+    font: 800 clamp(38px, 6vw, 76px) "Inter", sans-serif;
+    line-height: .98;
+    letter-spacing: -4px;
+}
+
+.hero h1 span {
+    display: block;
+    color: #68737a;
+}
+
+.hero p {
+    max-width: 560px;
+    margin-top: 22px;
+    color: var(--muted);
+    font: 400 11px "JetBrains Mono", monospace;
+    line-height: 1.8;
+}
+
+.hero-number {
+    position: absolute;
+    right: 20px;
+    bottom: -45px;
+    color: rgba(158,232,112,.035);
+    font: 900 280px "Inter", sans-serif;
+    line-height: 1;
+    user-select: none;
+}
+
+.status {
+    margin-top: 25px;
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+    background: #0c1114;
+    color: var(--muted);
+    font: 700 8px "JetBrains Mono", monospace;
+    letter-spacing: 1px;
+}
+
+.status-connected {
+    color: var(--accent);
+    border-color: #2d4431;
+    background: #0d1510;
+}
+
+.status-error {
+    color: var(--red);
+    border-color: #493033;
+    background: #160e10;
+}
+
+.current-section {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.sensor-card {
+    min-height: 205px;
+    padding: 21px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s ease, border-color .2s ease;
+}
+
+.sensor-card:hover {
+    transform: translateY(-4px);
+    border-color: #354149;
+}
+
+.sensor-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 45%;
+    height: 2px;
+    background: var(--accent);
+}
+
+.sensor-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sensor-code,
+.sensor-label,
+.sensor-description,
+.history-select label,
+.records-count span {
+    font-family: "JetBrains Mono", monospace;
+}
+
+.sensor-code {
+    color: #515d64;
+    font: 600 7px "JetBrains Mono", monospace;
+    letter-spacing: 1px;
+}
+
+.sensor-symbol {
+    width: 31px;
+    height: 31px;
+    display: grid;
+    place-items: center;
+    color: var(--accent);
+    border: 1px solid #2d4431;
+    background: #101a13;
+    font: 800 10px "JetBrains Mono", monospace;
+}
+
+.sensor-label {
+    margin-top: 30px;
+    color: #68747b;
+    font: 700 7px "JetBrains Mono", monospace;
+    letter-spacing: 1.5px;
+}
+
+.sensor-value {
+    margin-top: 8px;
+    color: #edf2f4;
+    font: 700 34px "JetBrains Mono", monospace;
+}
+
+.sensor-description {
+    margin-top: 17px;
+    color: #515d64;
+    font: 400 8px "JetBrains Mono", monospace;
+}
+
+.card {
+    margin-top: 55px;
+    padding: 25px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    position: relative;
+}
+
+.graph-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 85px;
+    height: 2px;
+    background: var(--accent);
+}
+
+.history-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 85px;
+    height: 2px;
+    background: var(--orange);
+}
+
+.wifi-section::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 85px;
+    height: 2px;
+    background: var(--accent);
+}
+
+.section-header,
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.section-header h2,
+.history-header h2,
+.wifi-section h2 {
+    margin-top: 8px;
+    color: var(--white);
+    font: 700 22px "Inter", sans-serif;
+}
+
+.section-header p,
+.wifi-section p {
+    margin-top: 7px;
+    color: var(--muted);
+    font: 400 9px "JetBrains Mono", monospace;
+}
+
+select {
+    min-width: 170px;
+    padding: 12px 14px;
+    border: 1px solid var(--line-light);
+    border-radius: 0;
+    outline: none;
+    background: #080b0d;
+    color: var(--accent);
+    font: 700 8px "JetBrains Mono", monospace;
+}
+
+select:focus {
+    border-color: var(--accent-dark);
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 430px;
+    padding-top: 8px;
+}
+
+.button {
+    min-height: 48px;
+    padding: 0 20px;
+    border: 1px solid;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font: 800 8px "JetBrains Mono", monospace;
+    letter-spacing: 1.2px;
+    transition: transform .2s ease, filter .2s ease, background .2s ease;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+}
+
+.button-start {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #081008;
+}
+
+.button-start:hover {
+    filter: brightness(1.08);
+}
+
+.history-controls {
+    display: flex;
+    align-items: end;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.history-select {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-select label {
+    color: #68747b;
+    font: 700 7px "JetBrains Mono", monospace;
+    letter-spacing: 1.5px;
+}
+
+.records-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 13px;
+    border: 1px solid var(--line);
+    background: #0a0f12;
+}
+
+.records-count span {
+    color: var(--dim);
+    font: 700 7px "JetBrains Mono", monospace;
+    letter-spacing: 1px;
+}
+
+.records-count strong {
+    color: var(--accent);
+    font: 700 9px "JetBrains Mono", monospace;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+}
+
+table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: collapse;
+}
+
+th {
+    padding: 13px 11px;
+    text-align: left;
+    background: #090d10;
+    color: #56636a;
+    border-bottom: 1px solid var(--line-light);
+    font: 700 7px "JetBrains Mono", monospace;
+    letter-spacing: 1.4px;
+}
+
+td {
+    padding: 13px 11px;
+    color: #b5bec2;
+    border-bottom: 1px solid #1b2328;
+    font: 400 8px "JetBrains Mono", monospace;
+}
+
+tbody tr:hover {
+    background: #12191d;
+}
+
+tbody tr td:nth-child(2) {
+    color: var(--accent);
+}
+
+tbody tr td:nth-child(3) {
+    color: var(--orange);
+}
+
+.loading {
+    text-align: center;
+    padding: 35px;
+    color: #68747b;
+}
+
+.hidden {
+    display: none;
+}
+
+.wifi-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.wifi-section p {
+    max-width: 650px;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 22px 2px 5px;
+    color: #48545b;
+    font: 600 7px "JetBrains Mono", monospace;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 900px) {
+    .page {
+        padding: 0 20px 30px;
+    }
+
+    .header-code {
+        display: none;
+    }
+
+    .hero {
+        min-height: 300px;
+    }
+
+    .hero-number {
+        right: -20px;
+        font-size: 220px;
+    }
+
+    .wifi-section {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .wifi-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 650px) {
+    .page {
+        padding: 0 13px 25px;
+    }
+
+    .header {
+        min-height: 75px;
+    }
+
+    .brand-symbol {
+        width: 37px;
+        height: 37px;
+    }
+
+    .brand-name {
+        font-size: 14px;
+    }
+
+    .hero {
+        min-height: 270px;
+    }
+
+    .hero-left {
+        padding: 50px 0;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+        letter-spacing: -2.5px;
+    }
+
+    .hero p {
+        font-size: 9px;
+    }
+
+    .hero-number {
+        font-size: 150px;
+        bottom: -20px;
+    }
+
+    .current-section {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header,
+    .history-header {
+        flex-direction: column;
+    }
+
+    select {
+        width: 100%;
+    }
+
+    .chart-container {
+        height: 350px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 400px) {
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .brand-sub {
+        font-size: 6px;
+    }
+
+    .sensor-value {
+        font-size: 27px;
+    }
+}

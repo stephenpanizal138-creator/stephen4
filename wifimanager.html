@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>STEPHEN // ESP32 NETWORK</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #07090b;
+            --panel: #0d1115;
+            --line: #222b32;
+            --line-light: #2c373f;
+            --text: #e8edf0;
+            --muted: #7c878e;
+            --dim: #4d585f;
+            --accent: #9ee870;
+            --accent-dark: #4f813e;
+            --orange: #d69b58;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "JetBrains Mono", monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .08;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(255,255,255,.025) 4px
+            );
+        }
+
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .20;
+            background-image:
+                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+            background-size: 45px 45px;
+        }
+
+        .wifi-page {
+            width: 100%;
+            max-width: 620px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .wifi-card {
+            background:
+                linear-gradient(135deg, #10161a, #0b0f12);
+            border: 1px solid var(--line);
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 70px rgba(0,0,0,.45);
+        }
+
+        .wifi-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 150px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .wifi-topline {
+            color: var(--dim);
+            font-size: 8px;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .wifi-icon {
+            width: 60px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+            background: var(--accent);
+            color: #091008;
+            font: 900 24px "Orbitron", sans-serif;
+            margin-bottom: 18px;
+            clip-path:
+                polygon(
+                    0 0,
+                    88% 0,
+                    100% 12%,
+                    100% 100%,
+                    12% 100%,
+                    0 88%
+                );
+        }
+
+        .system-label {
+            color: var(--accent);
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #f1f4f5;
+            font: 800 36px "Orbitron", sans-serif;
+            letter-spacing: -1px;
+        }
+
+        .wifi-description {
+            color: var(--muted);
+            font-size: 9px;
+            line-height: 1.8;
+            margin: 12px 0 30px;
+        }
+
+        .wifi-field {
+            margin-bottom: 20px;
+        }
+
+        .wifi-field label {
+            display: block;
+            color: #68747b;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .wifi-field input {
+            width: 100%;
+            height: 52px;
+            padding: 0 15px;
+            outline: none;
+            border: 1px solid var(--line-light);
+            background: #080b0d;
+            color: var(--accent);
+            font: 600 11px "JetBrains Mono", monospace;
+        }
+
+        .wifi-field input:focus {
+            border-color: var(--accent-dark);
+            box-shadow: 0 0 0 3px rgba(158,232,112,.04);
+        }
+
+        .wifi-field input::placeholder {
+            color: #3f4a50;
+        }
+
+        .wifi-submit {
+            width: 100%;
+            height: 54px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #081008;
+            cursor: pointer;
+            font: 800 9px "JetBrains Mono", monospace;
+            letter-spacing: 1.4px;
+            transition: .2s ease;
+        }
+
+        .wifi-submit:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+        }
+
+        .wifi-note {
+            margin-top: 25px;
+            padding: 16px;
+            border: 1px solid var(--line);
+            background: #0a0f12;
+            color: var(--muted);
+            font-size: 8px;
+            line-height: 1.8;
+        }
+
+        .wifi-note strong {
+            color: var(--orange);
+        }
+
+        .wifi-specs {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border: 1px solid var(--line);
+        }
+
+        .wifi-specs div {
+            padding: 13px;
+            border-right: 1px solid var(--line);
+        }
+
+        .wifi-specs div:last-child {
+            border-right: 0;
+        }
+
+        .wifi-specs span {
+            display: block;
+            color: var(--dim);
+            font-size: 6px;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .wifi-specs b {
+            color: #aab4b9;
+            font-size: 7px;
+            word-break: break-word;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: var(--dim);
+            text-decoration: none;
+            font-size: 8px;
+            letter-spacing: 1px;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .wifi-card {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .wifi-specs {
+                grid-template-columns: 1fr;
+            }
+
+            .wifi-specs div {
+                border-right: 0;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .wifi-specs div:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="scanlines"></div>
+<div class="grid-bg"></div>
+
+<div class="wifi-page">
+
+    <div class="wifi-card">
+
+        <div class="wifi-topline">
+            STEPHEN / ESP32 NETWORK CONFIGURATION
+        </div>
+
+        <div class="wifi-icon">W</div>
+
+        <div class="system-label">
+            SECURE FIELD LINK
+        </div>
+
+        <h1>Wi-Fi Manager</h1>
+
+        <p class="wifi-description">
+            Configure the network used by the ESP32 DHT11 sensor node.
+        </p>
+
+        <form action="/savewifi" method="POST">
+
+            <div class="wifi-field">
+                <label for="ssid">WI-FI SSID</label>
+
+                <input
+                    type="text"
+                    id="ssid"
+                    name="ssid"
+                    placeholder="Enter Wi-Fi name"
+                    required
+                >
+            </div>
+
+            <div class="wifi-field">
+                <label for="password">WI-FI PASSWORD</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter Wi-Fi password"
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="wifi-submit"
+            >
+                [ SAVE & CONNECT ]
+            </button>
+
+        </form>
+
+        <div class="wifi-note">
+            <strong>NETWORK NOTE</strong>
+            <br><br>
+            Credentials are saved in the ESP32 LittleFS memory
+            and reused on the next boot.
+        </div>
+
+        <div class="wifi-specs">
+
+            <div>
+                <span>AP SSID</span>
+                <b>ESP-WIFI-MANAGER</b>
+            </div>
+
+            <div>
+                <span>SECURITY</span>
+                <b>OPEN NETWORK</b>
+            </div>
+
+            <div>
+                <span>MANAGER IP</span>
+                <b>192.168.4.1</b>
+            </div>
+
+        </div>
+
+        <a href="/" class="back-link">
+            &lt; RETURN TO MONITOR
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
